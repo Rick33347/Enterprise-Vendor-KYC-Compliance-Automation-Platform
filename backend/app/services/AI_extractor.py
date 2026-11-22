@@ -30,7 +30,7 @@ def extract_structured_data(text: str) -> DocumentExtraction:
             },
             {
                 "role": "user",
-                "content": f"Here is the document text:\n\n{text}"
+                "content": f"Here is the document text:\n\n{safe_text}"
             }
         ],
         temperature=0.0, # 0.0 forces deterministic, factual answers (no creative guessing)
