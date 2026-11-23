@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import DocumentUpload from "./components/DocumentUpload";
-import ComplianceScore from "./components/ComplianceScore";
+import Sidebar from "./components/Sidebar";
+import DashboardPage from "./pages/DashboardPage";
+import UploadPage from "./pages/UploadPage";
+import HistoryPage from "./pages/HistoryPage";
+import ReportDetailPage from "./pages/ReportDetailPage";
 import "./App.css";
 
 export default function App() {
-  const [latestReport, setLatestReport] = useState(null);
+  const [activePage, setActivePage] = useState("dashboard");
   const [history, setHistory] = useState([]);
+  const [selectedReport, setSelectedReport] = useState(null);
 
   const fetchHistory = async () => {
     try {
@@ -23,58 +27,67 @@ export default function App() {
     fetchHistory();
   }, []);
 
+  const handleSelectHistoryItem = (item) => {
+    setSelectedReport({
+      id: item.id,
+      filename: item.filename,
+      created_at: item.created_at,
+      status: item.status,
+      compliance_score: item.compliance_score,
+      flags: item.flags || [],
+      extracted_data: {
+        organization_name: item.organization_name,
+        document_type: item.document_type,
+        important_dates: item.important_dates || [],
+        confidence_score: item.confidence_score,
+      },
+    });
+    setActivePage("report");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleEvaluationComplete = (report) => {
-    setLatestReport(report);
-    fetchHistory(); // Refresh audit history table from SQLite
+    setSelectedReport(report);
+    fetchHistory();
+    setActivePage("report");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="container">
-      <header className="app-header">
-        <h1>Enterprise Vendor eKYC & Compliance</h1>
-        <p>Automated PDF Extraction & Deterministic Rule Engine</p>
-      </header>
+    <div className="app-shell">
+      <Sidebar
+        activePage={activePage}
+        onNavigate={setActivePage}
+        historyCount={history.length}
+      />
 
-      <main className="main-grid">
-        <DocumentUpload onEvaluationComplete={handleEvaluationComplete} />
-        <ComplianceScore report={latestReport} />
-      </main>
-
-      <section className="card history-card">
-        <h2>Evaluation Audit History</h2>
-        {history.length === 0 ? (
-          <p className="subtitle">No documents evaluated yet.</p>
-        ) : (
-          <table className="history-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Filename</th>
-                <th>Organization</th>
-                <th>Doc Type</th>
-                <th>Score</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((item) => (
-                <tr key={item.id}>
-                  <td>#{item.id}</td>
-                  <td>{item.filename}</td>
-                  <td>{item.organization_name || "N/A"}</td>
-                  <td>{item.document_type}</td>
-                  <td>{item.compliance_score}/100</td>
-                  <td>
-                    <span className={`status-pill status-${item.status.toLowerCase()}`}>
-                      {item.status.replace("_", " ")}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <main className="main-workspace">
+        {activePage === "dashboard" && (
+          <DashboardPage
+            history={history}
+            onNavigate={setActivePage}
+            onSelectReport={handleSelectHistoryItem}
+          />
         )}
-      </section>
+
+        {activePage === "upload" && (
+          <UploadPage onEvaluationComplete={handleEvaluationComplete} />
+        )}
+
+        {activePage === "history" && (
+          <HistoryPage
+            history={history}
+            onSelectReport={handleSelectHistoryItem}
+          />
+        )}
+
+        {activePage === "report" && (
+          <ReportDetailPage
+            report={selectedReport}
+            onBack={() => setActivePage("history")}
+          />
+        )}
+      </main>
     </div>
   );
 }
