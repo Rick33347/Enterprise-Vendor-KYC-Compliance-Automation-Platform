@@ -1,0 +1,42 @@
+* { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+body { margin: 0; background: #0f172a; color: #f8fafc; }
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+.app-header { margin-bottom: 2rem; }
+.app-header h1 { margin: 0; font-size: 1.8rem; }
+.app-header p { margin: 0.4rem 0 0; color: #94a3b8; }
+
+.main-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+@media (max-width: 800px) { .main-grid { grid-template-columns: 1fr; } }
+
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.5rem; }
+.card h2 { margin-top: 0; font-size: 1.2rem; }
+.subtitle { color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem; }
+
+.file-input { display: block; width: 100%; margin: 1.25rem 0; padding: 0.75rem; background: #0f172a; border: 1px dashed #475569; border-radius: 8px; color: #e2e8f0; }
+.btn-primary { width: 100%; padding: 0.8rem; background: #3b82f6; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.btn-primary:disabled { background: #475569; cursor: not-allowed; }
+.error-text { color: #f87171; margin-top: 0.75rem; font-size: 0.9rem; }
+
+.result-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin: 1.25rem 0; }
+.metric-box { background: #0f172a; padding: 0.85rem; border-radius: 8px; border: 1px solid #334155; }
+.metric-label { display: block; font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; }
+.metric-value { font-size: 1.05rem; font-weight: 600; margin-top: 0.25rem; display: block; }
+
+.status-pill { padding: 0.3rem 0.7rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.status-approved { background: #064e3b; color: #34d399; }
+.status-review_required { background: #78350f; color: #fbbf24; }
+.status-rejected { background: #7f1d1d; color: #f87171; }
+
+.flag-item { background: #0f172a; border-left: 4px solid #ef4444; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.6rem; }
+.flag-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+.flag-badge { font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.45rem; border-radius: 4px; }
+.severity-high { background: #991b1b; color: #fecaca; }
+.severity-medium { background: #92400e; color: #fde68a; }
+.severity-low { background: #1e3a8a; color: #bfdbfe; }
+.flag-message { margin: 0; font-size: 0.88rem; color: #cbd5e1; }
+.no-flags { color: #34d399; font-size: 0.9rem; }
+
+.history-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+.history-table th, .history-table td { text-align: left; padding: 0.75rem; border-bottom: 1px solid #334155; }
+.history-table th { color: #94a3b8; font-weight: 600; }
